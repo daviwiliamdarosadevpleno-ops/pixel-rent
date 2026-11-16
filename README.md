@@ -5,7 +5,7 @@
 **Disciplinas:** Programação II, Engenharia de Software I e Banco de Dados II  
 **Professores:** Franciele Carla Petry, Otilia Donato Barbosa e Roberson Junior Fernandes Alves  
 **Equipa:** Erro404  
-**Integrantes:** Davi Wiliam Da Rosa, Luis e João  
+**Integrantes:** Davi Wiliam Da Rosa, Luís Felipe Schuck Klunk, João Carlos Andreolla e Tainá Regina da Rocha Fraga
 
 ---
 
