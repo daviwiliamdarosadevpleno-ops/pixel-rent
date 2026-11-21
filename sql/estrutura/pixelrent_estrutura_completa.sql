@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict rfgpnm53xMrAixpsRHfTgtgW1xHtSj2ZhCJDvdb7B3HBVxrNQrL6hnL7s4Aksa8
+\restrict PVPRn5LwaqrbnDMDLls33yiOHdymfS31hpauzwBWnQBd8D9jU2IT0g53hNSSvkl
 
 -- Dumped from database version 18.6
 -- Dumped by pg_dump version 18.6
 
--- Started on 2026-11-20 21:56:54
+-- Started on 2026-11-20 23:47:54
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -198,12 +198,12 @@ ALTER FUNCTION public.fn_autenticar_funcionario(p_login character varying, p_sen
 
 CREATE PROCEDURE public.sp_realizar_locacao(IN p_id_cliente integer, IN p_id_funcionario integer, IN p_midias integer[], IN p_dias integer, INOUT p_id_locacao integer)
     LANGUAGE plpgsql SECURITY DEFINER
-    SET search_path TO 'public'
+    SET search_path TO 'pg_catalog', 'public', 'pg_temp'
     AS $$
 DECLARE
-    v_ativo BOOLEAN;
-    v_qtd   INTEGER;
-    v_soma  NUMERIC(10,2);
+    v_ativo boolean;
+    v_qtd   integer;
+    v_soma  numeric(10,2);
 BEGIN
     IF p_dias IS NULL OR p_dias <= 0 THEN
         RAISE EXCEPTION 'Quantidade de dias invalida: %', p_dias;
@@ -213,41 +213,53 @@ BEGIN
         RAISE EXCEPTION 'Informe ao menos uma midia';
     END IF;
 
-    SELECT ativo INTO v_ativo FROM cliente WHERE id_cliente = p_id_cliente;
+    SELECT c.ativo
+      INTO v_ativo
+      FROM public.cliente AS c
+     WHERE c.id_cliente = p_id_cliente;
+
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Cliente % nao encontrado', p_id_cliente;
     END IF;
+
     IF NOT v_ativo THEN
         RAISE EXCEPTION 'Cliente % esta inativo', p_id_cliente;
     END IF;
 
-    SELECT ativo INTO v_ativo FROM funcionario WHERE id_funcionario = p_id_funcionario;
+    SELECT f.ativo
+      INTO v_ativo
+      FROM public.funcionario AS f
+     WHERE f.id_funcionario = p_id_funcionario;
+
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Funcionario % nao encontrado', p_id_funcionario;
     END IF;
+
     IF NOT v_ativo THEN
         RAISE EXCEPTION 'Funcionario % esta inativo', p_id_funcionario;
     END IF;
 
-    SELECT COUNT(*), SUM(valor_diaria)
+    SELECT count(*), sum(m.valor_diaria)
       INTO v_qtd, v_soma
-      FROM midia
-     WHERE id_midia = ANY(p_midias);
+      FROM public.midia AS m
+     WHERE m.id_midia = ANY(p_midias);
 
     IF v_qtd <> cardinality(p_midias) THEN
         RAISE EXCEPTION 'Lista de midias invalida (id inexistente ou repetido)';
     END IF;
 
-    INSERT INTO locacao (id_cliente, id_funcionario, data_locacao,
-                         prazo_devolucao, status, valor_total)
-    VALUES (p_id_cliente, p_id_funcionario, CURRENT_DATE,
-            CURRENT_DATE + p_dias, 'ATIVA', v_soma * p_dias)
+    INSERT INTO public.locacao
+        (id_cliente, id_funcionario, data_locacao,
+         prazo_devolucao, status, valor_total)
+    VALUES
+        (p_id_cliente, p_id_funcionario, CURRENT_DATE,
+         CURRENT_DATE + p_dias, 'ATIVA', v_soma * p_dias)
     RETURNING id_locacao INTO p_id_locacao;
 
-    INSERT INTO item_locacao (id_locacao, id_midia, valor_diaria)
-    SELECT p_id_locacao, id_midia, valor_diaria
-      FROM midia
-     WHERE id_midia = ANY(p_midias);
+    INSERT INTO public.item_locacao (id_locacao, id_midia, valor_diaria)
+    SELECT p_id_locacao, m.id_midia, m.valor_diaria
+      FROM public.midia AS m
+     WHERE m.id_midia = ANY(p_midias);
 END;
 $$;
 
@@ -1697,11 +1709,11 @@ GRANT ALL ON TABLE public.vw_locacoes_atrasadas TO grp_admin;
 GRANT SELECT ON TABLE public.vw_locacoes_atrasadas TO grp_atendente;
 
 
--- Completed on 2026-11-20 21:56:54
+-- Completed on 2026-11-20 23:47:55
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict rfgpnm53xMrAixpsRHfTgtgW1xHtSj2ZhCJDvdb7B3HBVxrNQrL6hnL7s4Aksa8
+\unrestrict PVPRn5LwaqrbnDMDLls33yiOHdymfS31hpauzwBWnQBd8D9jU2IT0g53hNSSvkl
 
