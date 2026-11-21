@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +13,32 @@
     </header>
 
     <main>
-        <h2>Bem-vindo ao Pixel Rent!</h2>
-        <p>Nossa nova plataforma web está sendo construída.</p>
+
+        <section th:if="${sessao != null}">
+            <h2>
+                Bem-vindo,
+                <span th:text="${sessao.nome()}">Funcionário</span>!
+            </h2>
+
+            <p>
+                Perfil:
+                <strong th:text="${sessao.perfil().descricao()}">
+                    Perfil
+                </strong>
+            </p>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit">Sair</button>
+            </form>
+        </section>
+
+        <section th:unless="${sessao != null}">
+            <h2>Bem-vindo ao Pixel Rent!</h2>
+            <p>Entre no sistema para acessar suas funcionalidades.</p>
+
+            <a th:href="@{/login}">Acessar minha conta</a>
+        </section>
+
     </main>
 
 </body>
