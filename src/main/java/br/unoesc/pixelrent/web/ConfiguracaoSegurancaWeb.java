@@ -1,3 +1,4 @@
+
 package br.unoesc.pixelrent.web;
 
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,52 @@ public class ConfiguracaoSegurancaWeb {
         http
             .authenticationProvider(autenticacaoWebProvider)
             .authorizeHttpRequests(autorizacao -> autorizacao
+
                 .requestMatchers("/", "/login").permitAll()
+
+                // Cadastros
+                .requestMatchers("/clientes/**")
+                    .hasAuthority("PERM_CLIENTES")
+
+                .requestMatchers("/jogos/**")
+                    .hasAuthority("PERM_JOGOS")
+
+                .requestMatchers("/funcionarios/**")
+                    .hasAuthority("PERM_FUNCIONARIOS")
+
+                .requestMatchers("/generos/**")
+                    .hasAuthority("PERM_GENEROS")
+
+                .requestMatchers("/plataformas/**")
+                    .hasAuthority("PERM_PLATAFORMAS")
+
+                .requestMatchers("/midias/**")
+                    .hasAuthority("PERM_MIDIAS")
+
+                // Operações
+                .requestMatchers("/locacoes/**")
+                    .hasAuthority("PERM_LOCACOES")
+
+                .requestMatchers("/devolucoes/**")
+                    .hasAuthority("PERM_DEVOLUCOES")
+
+                .requestMatchers("/consultas/**")
+                    .hasAuthority("PERM_CONSULTAS")
+
+                .requestMatchers("/manutencao/**")
+                    .hasAuthority("PERM_MANUTENCAO")
+
+                // Relatórios
+                .requestMatchers("/relatorios/jogos-mais-alugados/**")
+                    .hasAuthority("PERM_RELATORIO_JOGOS_MAIS_ALUGADOS")
+
+                .requestMatchers("/relatorios/faturamento-mensal/**")
+                    .hasAuthority("PERM_RELATORIO_FATURAMENTO_MENSAL")
+
+                .requestMatchers("/auditoria/**")
+                    .hasAuthority("PERM_AUDITORIA")
+
+                // Qualquer outra rota exige autenticação
                 .anyRequest().authenticated()
             )
             .formLogin(formulario -> formulario
