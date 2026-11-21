@@ -1,0 +1,20 @@
+PIXEL RENT — ETAPA 2 (LOGIN, SESSAO E MENUS)
+
+1. Extraia o conteúdo deste ZIP diretamente sobre a raiz de:
+   C:\Users\Luís Felipe\Documents\pixel-rent-github
+   Aceite mesclar as pastas src e docs.
+
+2. NÃO substitua pom.xml, config/pixelrent.properties, sql/ ou a estrutura da Etapa 1.
+
+3. No Eclipse: Maven > Update Project; confirme JDK 21.
+
+4. No terminal, na raiz do repositório:
+   mvn clean package
+
+5. No Eclipse, execute src/main/java/br/unoesc/pixelrent/App.java como Java Application.
+
+6. Use config/pixelrent.properties apontando para pixelrent_restore e com as credenciais PostgreSQL locais do role usr_atendente_teste. O login do funcionário é outra credencial.
+
+7. O arquivo config/pixelrent.properties e as senhas NÃO devem ser adicionados ao Git.
+
+Detalhes e roteiro: docs/ETAPA_2_AUTENTICACAO.md
