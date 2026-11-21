@@ -1,0 +1,32 @@
+# ============================================================================
+# Pixel Rent - MODELO de configuração local (sem segredos)
+#
+# 1. Copie este arquivo para  config/pixelrent.properties
+#    (esse arquivo é ignorado pelo Git e nunca deve ser enviado ao GitHub).
+# 2. Preencha usuário e senha de cada perfil de conexão.
+# 3. Qualquer chave pode ser definida por variável de ambiente, que tem
+#    prioridade sobre este arquivo. Regra: prefixo PIXELRENT_, letras
+#    maiúsculas e '.' trocado por '_'. Exemplo:
+#        db.atendente.password  ->  PIXELRENT_DB_ATENDENTE_PASSWORD
+# 4. Para usar outro local de arquivo, defina PIXELRENT_CONFIG com o caminho.
+#
+# Formato .properties: não deixe espaços no fim da linha (fariam parte da
+# senha) e escreva a barra invertida '\' como '\\'.
+# ============================================================================
+
+db.host=localhost
+db.port=5432
+
+# Use pixelrent_restore no desenvolvimento e nos testes.
+# Use pixelrent somente na demonstração final.
+db.name=pixelrent_restore
+
+# Perfil de funcionário comum (conecta com um role do grupo grp_atendente).
+# Exemplo no ambiente de desenvolvimento da equipe: usr_atendente_teste
+db.atendente.user=
+db.atendente.password=
+
+# Perfil de administrador (conecta com um role do grupo grp_admin).
+# Exemplo no ambiente de desenvolvimento da equipe: usr_admin_teste
+db.admin.user=
+db.admin.password=
