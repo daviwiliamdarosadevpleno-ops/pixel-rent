@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+                 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.2.0</version>
+    <relativePath/>
+  </parent>
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>br.unoesc</groupId>
@@ -41,6 +48,23 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- Aplicação web com Spring MVC e servidor Tomcat -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webmvc</artifactId>
+    </dependency>
+
+    <!-- Páginas HTML com Thymeleaf -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+
+    <!-- Autenticação e controle de acesso -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
     <!-- Driver JDBC: o código usa apenas a API java.sql, então o driver só é necessário em execução. -->
     <dependency>
       <groupId>org.postgresql</groupId>
