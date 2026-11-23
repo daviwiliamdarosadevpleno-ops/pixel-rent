@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${tituloModulo})}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell(${tituloModulo}, ~{::main})}">
+<main class="page-body">
+    <div class="container-xl">
+        <div class="page-header d-print-none mb-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="page-pretitle" th:text="|Cadastros / ${tituloModulo}|">Cadastros</div>
+                    <h2 class="page-title" th:text="${modoEdicao} ? |Editar ${nomeSingular}| : |Novo ${nomeSingular}|">Novo registro</h2>
+                    <div class="text-secondary mt-1">Informe o nome do registro.</div>
+                </div>
+                <div class="col-auto ms-auto"><a th:href="@{${urlAcao.substring(0, urlAcao.lastIndexOf('/') == 0 ? urlAcao.length() : (modoEdicao ? urlAcao.lastIndexOf('/') : urlAcao.length()))}}" class="btn btn-outline-secondary">Voltar</a></div>
+            </div>
+        </div>
+
+        <div class="row row-cards">
+            <div class="col-12 col-lg-8 col-xl-7">
+                <form th:action="@{${urlAcao}}" th:object="${nomeForm}" method="post" class="card">
+                    <div class="card-header"><h3 class="card-title">Dados cadastrais</h3></div>
+                    <div class="card-body">
+                        <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label required">Nome</label>
+                            <input type="text" class="form-control" id="nome" th:field="*{nome}"
+                                   maxlength="50" placeholder="Digite o nome" autocomplete="off" required autofocus>
+                            <small class="form-hint">Máximo de 50 caracteres. Não são aceitos nomes vazios.</small>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                        <span class="text-secondary small">Campo obrigatório</span>
+                        <div class="ms-auto btn-list">
+                            <a th:href="@{${urlLista}}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary"
+                                    th:text="${modoEdicao} ? 'Salvar alterações' : 'Cadastrar'">Cadastrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+/* Ajustes próprios do Pixel Rent sobre o Tabler. Evita regras globais que sobrescrevam o tema. */
+:root {
+    --pixelrent-navy: #172554;
+    --pixelrent-blue: #2563eb;
+}
+
+.pixelrent-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: .55rem;
+    background: var(--pixelrent-blue);
+    color: #fff;
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: -.04em;
+}
+
+.page-wrapper > .navbar .navbar-text {
+    font-weight: 600;
+}
+
+@media (max-width: 991.98px) {
+    .page-wrapper {
+        min-width: 0;
+    }
+}

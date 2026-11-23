@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Jogos mais alugados')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Jogos mais alugados', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Relatórios</div><h2 class="page-title">Jogos mais alugados</h2><div class="text-secondary mt-1">Ranking calculado a partir dos itens registrados nas locações.</div></div></div></div>
+    <div class="row row-cards mb-3"><div class="col-sm-6 col-lg-4"><div class="card"><div class="card-body"><div class="subheader">Jogos no ranking</div><div class="h1 mb-0" th:text="${totalJogos}">0</div></div></div></div><div class="col-sm-6 col-lg-4"><div class="card"><div class="card-body"><div class="subheader">Itens locados contabilizados</div><div class="h1 mb-0" th:text="${totalLocacoes}">0</div></div></div></div></div>
+    <div class="card"><div class="card-header"><h3 class="card-title">Classificação por quantidade de locações</h3></div><div class="table-responsive"><table class="table table-vcenter card-table table-hover"><thead><tr><th class="w-1">Posição</th><th>Jogo</th><th>Gênero</th><th class="text-end">Vezes alugado</th></tr></thead><tbody>
+        <tr th:each="jogo, status : ${jogos}"><td><span class="badge bg-secondary-lt" th:text="${status.count}">1</span></td><td class="fw-semibold" th:text="${jogo.titulo()}">Jogo</td><td th:text="${jogo.genero()}">Gênero</td><td class="text-end"><span class="badge bg-blue-lt" th:text="${jogo.vezesAlugado()}">0</span></td></tr>
+        <tr th:if="${#lists.isEmpty(jogos)}"><td colspan="4" class="text-secondary py-4 text-center">Ainda não há locações registradas para montar o ranking.</td></tr>
+    </tbody></table></div><div class="card-footer text-secondary small">A contagem segue a view vw_jogos_mais_alugados: cada item de locação é contabilizado.</div></div>
+</div></main>
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Funcionários')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Funcionários', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center">
+        <div class="col"><div class="page-pretitle">Administração</div><h2 class="page-title">Funcionários</h2>
+            <div class="text-secondary mt-1">Cadastre contas, ajuste perfis e controle o acesso ao sistema.</div></div>
+        <div class="col-auto ms-auto"><a th:href="@{/funcionarios/novo}" class="btn btn-primary">Novo funcionário</a></div>
+    </div></div>
+    <div th:if="${sucesso}" class="alert alert-success" role="alert" th:text="${sucesso}"></div>
+    <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+    <div class="alert alert-info" role="alert">As contas são desativadas, não excluídas, para preservar o histórico. O sistema impede desativar a própria conta ou ficar sem administrador ativo.</div>
+    <div class="card mb-3"><div class="card-header"><h3 class="card-title">Pesquisar funcionários</h3></div><div class="card-body">
+        <form th:action="@{/funcionarios}" method="get" class="row g-3 align-items-end">
+            <div class="col-12 col-lg-6"><label for="pesquisa" class="form-label">Nome, login ou CPF</label>
+                <input type="search" id="pesquisa" name="pesquisa" class="form-control" placeholder="Digite para pesquisar" th:value="${pesquisa}"></div>
+            <div class="col-12 col-lg-3"><label class="form-check mt-lg-4"><input class="form-check-input" type="checkbox" name="incluirInativos" value="true" th:checked="${incluirInativos}"><span class="form-check-label">Mostrar inativos</span></label></div>
+            <div class="col-12 col-lg-3 d-flex gap-2"><button class="btn btn-primary" type="submit">Pesquisar</button><a th:href="@{/funcionarios}" class="btn btn-outline-secondary">Limpar</a></div>
+        </form>
+    </div></div>
+    <div class="card"><div class="card-header"><h3 class="card-title">Contas cadastradas</h3><div class="card-actions text-secondary" th:text="${#lists.size(funcionarios)} + ' registro(s)'">0 registros</div></div>
+        <div class="table-responsive"><table class="table table-vcenter card-table table-hover"><thead><tr><th>Funcionário</th><th>CPF</th><th>Contato</th><th>Login</th><th>Perfil</th><th>Situação</th><th class="w-1">Ações</th></tr></thead><tbody>
+            <tr th:each="funcionario : ${funcionarios}">
+                <td><div class="fw-semibold" th:text="${funcionario.nome()}">Nome</div><div class="text-secondary small" th:text="|ID ${funcionario.idFuncionario()}|">ID</div></td>
+                <td th:text="${funcionario.cpf()}">00000000000</td>
+                <td><div th:text="${funcionario.telefone() == null or funcionario.telefone().isBlank() ? '-' : funcionario.telefone()}"></div><div class="text-secondary small" th:text="${funcionario.email() == null or funcionario.email().isBlank() ? '-' : funcionario.email()}"></div></td>
+                <td th:text="${funcionario.login()}">login</td>
+                <td><span class="badge bg-blue-lt" th:text="${funcionario.perfil().descricao()}">Perfil</span></td>
+                <td><span th:if="${funcionario.ativo()}" class="badge bg-success">Ativo</span><span th:unless="${funcionario.ativo()}" class="badge bg-secondary">Inativo</span></td>
+                <td><div class="btn-list flex-nowrap">
+                    <a class="btn btn-sm btn-outline-primary" th:href="@{/funcionarios/{id}/editar(id=${funcionario.idFuncionario()})}">Editar</a>
+                    <form th:if="${funcionario.idFuncionario() != sessao.idFuncionario()}" th:action="@{/funcionarios/{id}/situacao(id=${funcionario.idFuncionario()})}" method="post" class="m-0" onsubmit="return confirm('Confirma a alteração da situação desta conta?');">
+                        <input type="hidden" name="ativo" th:value="${!funcionario.ativo()}">
+                        <button type="submit" class="btn btn-sm" th:classappend="${funcionario.ativo()} ? 'btn-outline-danger' : 'btn-outline-success'" th:text="${funcionario.ativo()} ? 'Desativar' : 'Ativar'">Alterar</button>
+                    </form>
+                </div></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(funcionarios)}"><td colspan="7"><div class="empty py-4"><p class="empty-title">Nenhum funcionário encontrado</p><p class="empty-subtitle text-secondary">Altere os filtros ou cadastre uma nova conta.</p><div class="empty-action"><a th:href="@{/funcionarios/novo}" class="btn btn-primary">Cadastrar funcionário</a></div></div></td></tr>
+        </tbody></table></div>
+    </div>
+</div></main>
+</div>
+</body>
+</html>

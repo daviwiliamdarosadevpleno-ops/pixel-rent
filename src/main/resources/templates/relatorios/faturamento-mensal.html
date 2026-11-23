@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Faturamento mensal')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Faturamento mensal', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Relatórios administrativos</div><h2 class="page-title">Faturamento mensal</h2><div class="text-secondary mt-1">Valores das locações concluídas, agrupados pelo mês em que foram registradas.</div></div></div></div>
+    <div class="alert alert-info" role="alert">O total segue a view vw_faturamento_mensal e considera somente locações com status CONCLUIDA.</div>
+    <div class="row row-cards mb-3"><div class="col-sm-6 col-lg-4"><div class="card"><div class="card-body"><div class="subheader">Faturamento no período</div><div class="h1 mb-0" th:text="${#numbers.formatCurrency(faturamentoTotal)}">R$ 0,00</div></div></div></div><div class="col-sm-6 col-lg-4"><div class="card"><div class="card-body"><div class="subheader">Locações concluídas</div><div class="h1 mb-0" th:text="${totalLocacoes}">0</div></div></div></div><div class="col-sm-6 col-lg-4"><div class="card"><div class="card-body"><div class="subheader">Meses com movimento</div><div class="h1 mb-0" th:text="${quantidadeMeses}">0</div></div></div></div></div>
+    <div class="card"><div class="card-header"><h3 class="card-title">Resumo por mês</h3></div><div class="table-responsive"><table class="table table-vcenter card-table table-hover"><thead><tr><th>Mês</th><th class="text-end">Locações concluídas</th><th class="text-end">Faturamento</th></tr></thead><tbody>
+        <tr th:each="mes : ${meses}"><td class="fw-semibold" th:text="${mes.mesFormatado()}">01/2026</td><td class="text-end" th:text="${mes.quantidadeLocacoes()}">0</td><td class="text-end fw-semibold" th:text="${#numbers.formatCurrency(mes.faturamento())}">R$ 0,00</td></tr>
+        <tr th:if="${#lists.isEmpty(meses)}"><td colspan="3" class="text-secondary py-4 text-center">Ainda não há locações concluídas para apresentar faturamento.</td></tr>
+    </tbody></table></div></div>
+</div></main>
+</div>
+</body>
+</html>

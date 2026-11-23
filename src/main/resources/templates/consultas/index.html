@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Consultas')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Consultas', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Visão operacional</div><h2 class="page-title">Consultas</h2><div class="text-secondary mt-1">Acompanhe disponibilidade, atrasos e histórico de locações.</div></div></div></div>
+    <div class="row row-cards mb-3">
+        <div class="col-sm-6 col-lg-3"><div class="card"><div class="card-body"><div class="subheader">Itens pendentes</div><div class="h1 mb-0" th:text="${#lists.size(painel.locacoesAtivas())}">0</div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="card"><div class="card-body"><div class="subheader">Itens atrasados</div><div class="h1 mb-0 text-danger" th:text="${#lists.size(painel.locacoesAtrasadas())}">0</div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="card"><div class="card-body"><div class="subheader">Mídias disponíveis</div><div class="h1 mb-0 text-success" th:text="${painel.midiasDisponiveis()}">0</div></div></div></div>
+        <div class="col-sm-6 col-lg-3"><div class="card"><div class="card-body"><div class="subheader">Itens no histórico</div><div class="h1 mb-0" th:text="${#lists.size(painel.historico())}">0</div></div></div></div>
+    </div>
+    <div class="card mb-3"><div class="card-header"><h3 class="card-title">Locações atrasadas</h3></div><div class="table-responsive"><table class="table table-vcenter card-table"><thead><tr><th>Locação</th><th>Cliente</th><th>Telefone</th><th>Jogo</th><th>Prazo</th><th>Atraso</th><th>Multa estimada</th></tr></thead><tbody>
+        <tr th:each="item : ${painel.locacoesAtrasadas()}"><td th:text="|#${item.idLocacao()}|">#1</td><td th:text="${item.cliente()}">Cliente</td><td th:text="${item.telefone()}">Telefone</td><td th:text="${item.tituloJogo()}">Jogo</td><td th:text="${#temporals.format(item.prazoDevolucao(), 'dd/MM/yyyy')}">01/01/2026</td><td><span class="badge bg-red-lt" th:text="|${item.diasAtraso()} dia(s)|">1 dia</span></td><td th:text="${#numbers.formatCurrency(item.multaEstimada())}">R$ 0,00</td></tr>
+        <tr th:if="${#lists.isEmpty(painel.locacoesAtrasadas())}"><td colspan="7" class="text-secondary">Nenhum item atrasado.</td></tr>
+    </tbody></table></div></div>
+    <div class="card"><div class="card-header"><h3 class="card-title">Histórico de locações</h3></div><div class="table-responsive"><table class="table table-vcenter card-table table-hover"><thead><tr><th>Locação</th><th>Cliente</th><th>Jogo</th><th>Plataforma</th><th>Data</th><th>Devolução</th><th>Diária</th><th>Multa</th><th>Status</th></tr></thead><tbody>
+        <tr th:each="item : ${painel.historico()}"><td th:text="|#${item.idLocacao()}|">#1</td><td th:text="${item.cliente()}">Cliente</td><td th:text="${item.tituloJogo()}">Jogo</td><td th:text="${item.plataforma()}">Plataforma</td><td th:text="${#temporals.format(item.dataLocacao(), 'dd/MM/yyyy')}">01/01/2026</td><td th:text="${item.dataDevolucao() == null ? 'Pendente' : #temporals.format(item.dataDevolucao(), 'dd/MM/yyyy')}">Pendente</td><td th:text="${#numbers.formatCurrency(item.valorDiaria())}">R$ 0,00</td><td th:text="${#numbers.formatCurrency(item.multa())}">R$ 0,00</td><td><span class="badge" th:classappend="${item.status() == 'CONCLUIDA'} ? 'bg-green-lt' : 'bg-blue-lt'" th:text="${item.status()}">ATIVA</span></td></tr>
+        <tr th:if="${#lists.isEmpty(painel.historico())}"><td colspan="9" class="text-secondary">Ainda não há histórico de locações.</td></tr>
+    </tbody></table></div></div>
+</div></main></div>
+</body></html>

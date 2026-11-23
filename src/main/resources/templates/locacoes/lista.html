@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Locações')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Locações', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Operações</div><h2 class="page-title">Locações</h2><div class="text-secondary mt-1">Acompanhe as mídias que ainda estão emprestadas.</div></div><div class="col-auto ms-auto"><a th:href="@{/locacoes/nova}" class="btn btn-primary">Nova locação</a></div></div></div>
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div><div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+    <div class="card"><div class="card-header"><h3 class="card-title">Itens com devolução pendente</h3><div class="card-actions text-secondary" th:text="${#lists.size(itens)} + ' item(ns)'">0 item(ns)</div></div>
+        <div class="table-responsive"><table class="table table-vcenter card-table table-hover"><thead><tr><th>Locação</th><th>Cliente</th><th>Jogo</th><th>Plataforma</th><th>Funcionário</th><th>Data</th><th>Prazo</th><th>Diária</th><th>Status</th></tr></thead><tbody>
+            <tr th:each="item : ${itens}"><td th:text="|#${item.idLocacao()}|">#1</td><td th:text="${item.cliente()}">Cliente</td><td class="fw-semibold" th:text="${item.tituloJogo()}">Jogo</td><td th:text="${item.plataforma()}">Plataforma</td><td th:text="${item.funcionario()}">Funcionário</td><td th:text="${#temporals.format(item.dataLocacao(), 'dd/MM/yyyy')}">01/01/2026</td><td th:text="${#temporals.format(item.prazoDevolucao(), 'dd/MM/yyyy')}">01/01/2026</td><td th:text="${#numbers.formatCurrency(item.valorDiaria())}">R$ 0,00</td><td><span class="badge" th:classappend="${item.status() == 'ATRASADA'} ? 'bg-red-lt' : 'bg-blue-lt'" th:text="${item.status()}">ATIVA</span></td></tr>
+            <tr th:if="${#lists.isEmpty(itens)}"><td colspan="9"><div class="empty py-4"><p class="empty-title">Nenhuma locação pendente</p><p class="empty-subtitle text-secondary">As novas locações aparecerão aqui.</p><div class="empty-action"><a th:href="@{/locacoes/nova}" class="btn btn-primary">Registrar locação</a></div></div></td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="mt-3 text-secondary small">A lista mostra cada mídia ainda não devolvida. Uma locação com vários itens pode aparecer em mais de uma linha.</div>
+</div></main></div>
+</body></html>

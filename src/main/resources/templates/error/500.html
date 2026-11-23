@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Erro interno')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Erro interno', ~{::main})}">
+<main class="page-body"><div class="container-xl"><div class="empty">
+    <div class="empty-header">500</div><p class="empty-title">Erro interno do sistema</p>
+    <p class="empty-subtitle text-secondary">Não foi possível concluir sua solicitação. Tente novamente mais tarde.</p>
+    <div class="empty-action"><a th:href="@{/}" class="btn btn-primary">Voltar ao painel</a></div>
+</div></div></main>
+</div>
+</body>
+</html>

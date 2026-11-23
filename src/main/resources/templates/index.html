@@ -1,113 +1,31 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Rent</title>
-</head>
+<head th:replace="~{fragments/layout :: head('Painel principal')}"></head>
 <body>
-
-    <header>
-        <h1>Pixel Rent</h1>
-        <p>Sistema de gerenciamento de locação de jogos.</p>
-    </header>
-
-    <main>
-
-        <section th:if="${sessao != null}">
-            <h2>
-                Bem-vindo,
-                <span th:text="${sessao.nome()}">Funcionário</span>!
-            </h2>
-
-            <p>
-                Perfil:
-                <strong th:text="${sessao.perfil().descricao()}">
-                    Perfil
-                </strong>
-            </p>
-
-            <form th:action="@{/logout}" method="post">
-                <button type="submit">Sair</button>
-            </form>
-        </section>
-
-        <section th:unless="${sessao != null}">
-            <h2>Bem-vindo ao Pixel Rent!</h2>
-            <p>Entre no sistema para acessar suas funcionalidades.</p>
-            <a th:href="@{/login}">Acessar minha conta</a>
-        </section>
-
-        <section th:if="${sessao != null}">
-            <h2>Menu principal</h2>
-
-            <section>
-                <h3>Cadastros</h3>
-
-                <p th:if="${permissoes.contains('CLIENTES')}">
-                    Clientes — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('JOGOS')}">
-                    Jogos — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('FUNCIONARIOS')}">
-                    Funcionários — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('GENEROS')}">
-                    Gêneros — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('PLATAFORMAS')}">
-                    Plataformas — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('MIDIAS')}">
-                    Mídias — Em desenvolvimento
-                </p>
-            </section>
-
-            <section>
-                <h3>Operações</h3>
-
-                <p th:if="${permissoes.contains('LOCACOES')}">
-                    Nova locação — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('DEVOLUCOES')}">
-                    Devoluções — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('CONSULTAS')}">
-                    Consultas — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('MANUTENCAO')}">
-                    Manutenção de mídias — Em desenvolvimento
-                </p>
-            </section>
-
-            <section>
-                <h3>Relatórios</h3>
-
-                <p th:if="${permissoes.contains('RELATORIO_JOGOS_MAIS_ALUGADOS')}">
-                    Jogos mais alugados — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('RELATORIO_FATURAMENTO_MENSAL')}">
-                    Faturamento mensal — Em desenvolvimento
-                </p>
-
-                <p th:if="${permissoes.contains('AUDITORIA')}">
-                    Auditoria — Em desenvolvimento
-                </p>
-            </section>
-        </section>
-
-    </main>
-
+<div th:replace="~{fragments/layout :: shell('Painel principal', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <section th:if="${sessao != null}">
+        <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Visão geral</div><h2 class="page-title">Bem-vindo, <span th:text="${sessao.nome()}">Funcionário</span>!</h2><div class="text-secondary mt-1">Perfil: <span class="badge bg-blue-lt" th:text="${sessao.perfil().descricao()}">Perfil</span></div></div></div></div>
+        <div class="row row-cards">
+            <div class="col-12"><h3 class="mb-0">Cadastros</h3></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('CLIENTES')}"><a th:href="@{/clientes}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-blue-lt me-3">CL</span><h3 class="card-title mb-0">Clientes</h3></div><p class="text-secondary mb-0">Cadastrar, pesquisar e gerenciar clientes.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('JOGOS')}"><a th:href="@{/jogos}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-purple-lt me-3">JG</span><h3 class="card-title mb-0">Jogos</h3></div><p class="text-secondary mb-0">Gerenciar jogos, gêneros e plataformas.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('GENEROS')}"><a th:href="@{/generos}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-green-lt me-3">GE</span><h3 class="card-title mb-0">Gêneros</h3></div><p class="text-secondary mb-0">Cadastrar e gerenciar categorias dos jogos.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('PLATAFORMAS')}"><a th:href="@{/plataformas}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-cyan-lt me-3">PL</span><h3 class="card-title mb-0">Plataformas</h3></div><p class="text-secondary mb-0">Gerenciar plataformas dos jogos.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('MIDIAS')}"><a th:href="@{/midias}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-yellow-lt me-3">MI</span><h3 class="card-title mb-0">Mídias</h3></div><p class="text-secondary mb-0">Gerenciar unidades físicas e licenças digitais.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('FUNCIONARIOS')}"><a th:href="@{/funcionarios}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-orange-lt me-3">FU</span><h3 class="card-title mb-0">Funcionários</h3></div><p class="text-secondary mb-0">Cadastrar contas, editar perfis e controlar acessos.</p></div></a></div>
+            <div class="col-12 mt-2"><h3 class="mb-0">Operações</h3></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('LOCACOES')}"><a th:href="@{/locacoes}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-indigo-lt me-3">LO</span><h3 class="card-title mb-0">Locações</h3></div><p class="text-secondary mb-0">Registrar e acompanhar locações.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('DEVOLUCOES')}"><a th:href="@{/devolucoes}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-pink-lt me-3">DE</span><h3 class="card-title mb-0">Devoluções</h3></div><p class="text-secondary mb-0">Registrar devoluções e multas.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('CONSULTAS')}"><a th:href="@{/consultas}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-azure-lt me-3">CO</span><h3 class="card-title mb-0">Consultas</h3></div><p class="text-secondary mb-0">Acompanhar atrasos, disponibilidade e histórico.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('MANUTENCAO')}"><a th:href="@{/manutencao}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-orange-lt me-3">MA</span><h3 class="card-title mb-0">Manutenção</h3></div><p class="text-secondary mb-0">Acompanhar e liberar mídias reparadas.</p></div></a></div>
+            <div class="col-12 mt-2"><h3 class="mb-0">Relatórios e controle</h3></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('RELATORIO_JOGOS_MAIS_ALUGADOS')}"><a th:href="@{/relatorios/jogos-mais-alugados}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-green-lt me-3">RE</span><h3 class="card-title mb-0">Jogos mais alugados</h3></div><p class="text-secondary mb-0">Consultar o ranking de popularidade dos jogos.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('RELATORIO_FATURAMENTO_MENSAL')}"><a th:href="@{/relatorios/faturamento-mensal}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-teal-lt me-3">FA</span><h3 class="card-title mb-0">Faturamento mensal</h3></div><p class="text-secondary mb-0">Consultar valores das locações concluídas por mês.</p></div></a></div>
+            <div class="col-sm-6 col-lg-4" th:if="${permissoes.contains('AUDITORIA')}"><a th:href="@{/auditoria}" class="card card-link card-link-pop h-100"><div class="card-body"><div class="d-flex align-items-center mb-3"><span class="avatar bg-secondary-lt me-3">AU</span><h3 class="card-title mb-0">Auditoria</h3></div><p class="text-secondary mb-0">Consultar histórico de alterações em locações.</p></div></a></div>
+        </div>
+    </section>
+    <section th:unless="${sessao != null}" class="empty"><div class="empty-icon"><span class="avatar avatar-xl bg-blue-lt">PR</span></div><p class="empty-title">Bem-vindo ao Pixel Rent</p><p class="empty-subtitle text-secondary">Entre no sistema para acessar suas funcionalidades.</p><div class="empty-action"><a th:href="@{/login}" class="btn btn-primary">Acessar minha conta</a></div></section>
+</div></main></div>
 </body>
 </html>

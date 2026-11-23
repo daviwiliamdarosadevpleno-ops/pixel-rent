@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastro de jogos')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Cadastro de jogos', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header mb-3"><div><div class="page-pretitle">Catálogo / Jogos</div><h2 class="page-title" th:text="${modoEdicao} ? 'Editar jogo' : 'Novo jogo'">Novo jogo</h2></div></div>
+    <div class="row row-cards"><div class="col-12 col-xl-8"><form class="card" th:action="@{${urlAcao}}" th:object="${jogoForm}" method="post">
+        <div class="card-header"><h3 class="card-title">Dados do jogo</h3></div><div class="card-body">
+            <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+            <div class="mb-3"><label class="form-label required" for="titulo">Título</label><input id="titulo" class="form-control" th:field="*{titulo}" maxlength="150" required autofocus></div>
+            <div class="row"><div class="col-md-4 mb-3"><label class="form-label required" for="anoLancamento">Ano de lançamento</label><input id="anoLancamento" type="number" class="form-control" th:field="*{anoLancamento}" min="1970" max="2100" required></div><div class="col-md-4 mb-3"><label class="form-label" for="classificacaoIndicativa">Classificação indicativa</label><input id="classificacaoIndicativa" class="form-control" th:field="*{classificacaoIndicativa}" maxlength="10" placeholder="LIVRE"><small class="form-hint">Até 10 caracteres. Ex.: LIVRE, 10, 12, 14, 16 ou 18.</small></div><div class="col-md-4 mb-3"><label class="form-label required" for="idGenero">Gênero</label><select id="idGenero" class="form-select" th:field="*{idGenero}" required><option value="">Selecione</option><option th:each="genero : ${generos}" th:value="${genero.id()}" th:text="${genero.nome()}"></option></select></div></div>
+            <div class="mb-2"><label class="form-label required">Plataformas disponíveis para este jogo</label><div class="row g-2"><div class="col-sm-6 col-lg-4" th:each="plataforma : ${plataformas}"><label class="form-check"><input class="form-check-input" type="checkbox" th:field="*{plataformas}" th:value="${plataforma.id()}" th:disabled="${modoEdicao and !podeAlterarPlataformas}"><span class="form-check-label" th:text="${plataforma.nome()}">Plataforma</span></label><input th:if="${modoEdicao and !podeAlterarPlataformas and #lists.contains(jogoForm.plataformas, plataforma.id())}" type="hidden" name="plataformas" th:value="${plataforma.id()}"></div></div><small class="form-hint" th:if="${!modoEdicao or podeAlterarPlataformas}">Selecione ao menos uma plataforma. As associações serão salvas junto com o jogo.</small><small class="form-hint" th:if="${modoEdicao and !podeAlterarPlataformas}">O perfil de funcionário pode editar os dados do jogo, mas não alterar suas associações de plataformas.</small></div>
+        </div><div class="card-footer d-flex"><a th:href="@{/jogos}" class="btn btn-outline-secondary">Cancelar</a><button type="submit" class="btn btn-primary ms-auto" th:text="${modoEdicao} ? 'Salvar alterações' : 'Cadastrar jogo'">Cadastrar jogo</button></div>
+    </form></div></div>
+</div></main></div></body></html>

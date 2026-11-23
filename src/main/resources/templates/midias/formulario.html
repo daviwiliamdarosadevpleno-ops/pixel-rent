@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastro de mídias')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Cadastro de mídias', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header mb-3"><div><div class="page-pretitle">Catálogo / Mídias</div><h2 class="page-title" th:text="${modoEdicao} ? 'Editar mídia' : 'Nova mídia'">Nova mídia</h2><div class="text-secondary">O status é controlado pelo fluxo de locação, devolução e manutenção.</div></div></div>
+    <div class="row row-cards"><div class="col-12 col-xl-8"><form class="card" th:action="@{${urlAcao}}" th:object="${midiaForm}" method="post">
+        <div class="card-header"><h3 class="card-title">Dados da mídia</h3></div><div class="card-body">
+            <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+            <div th:if="${modoEdicao}" class="alert alert-info"><strong th:text="${midia.tituloJogo()}">Jogo</strong> — <span th:text="${midia.nomePlataforma()}">Plataforma</span>. O vínculo e o tipo não podem ser alterados depois do cadastro.</div>
+            <div class="mb-3" th:unless="${modoEdicao}"><label class="form-label required" for="idJogoPlataforma">Jogo e plataforma</label><select id="idJogoPlataforma" class="form-select" th:field="*{idJogoPlataforma}" required><option value="">Selecione uma combinação</option><option th:each="opcao : ${opcoesJogoPlataforma}" th:value="${opcao.chave()}" th:text="${opcao.descricao()}"></option></select><small class="form-hint">Somente combinações já cadastradas no jogo são permitidas.</small></div>
+            <input type="hidden" th:if="${modoEdicao}" th:field="*{idJogoPlataforma}">
+            <div class="mb-3" th:unless="${modoEdicao}"><label class="form-label required" for="tipo">Tipo de mídia</label><select id="tipo" class="form-select" th:field="*{tipo}" required><option value="FISICA">Física</option><option value="DIGITAL">Digital</option></select></div>
+            <input type="hidden" th:if="${modoEdicao}" th:field="*{tipo}">
+            <div class="mb-3"><label class="form-label required" for="valorDiaria">Valor da diária (R$)</label><input id="valorDiaria" type="number" min="0.01" step="0.01" class="form-control" th:field="*{valorDiaria}" required></div>
+            <div class="physical-fields" th:classappend="${midiaForm.tipo == 'FISICA'} ? '' : 'd-none'">
+                <div class="mb-3"><label class="form-label required" for="codigoBarras">Código de barras</label><input id="codigoBarras" class="form-control" th:field="*{codigoBarras}" maxlength="30"></div>
+                <div class="mb-3"><label class="form-label required" for="estadoConservacao">Estado de conservação</label><select id="estadoConservacao" class="form-select" th:field="*{estadoConservacao}"><option value="NOVO">Novo</option><option value="BOM">Bom</option><option value="REGULAR">Regular</option><option value="RUIM">Ruim</option></select></div>
+            </div>
+            <div class="digital-fields" th:classappend="${midiaForm.tipo == 'DIGITAL'} ? '' : 'd-none'">
+                <div class="mb-3"><label class="form-label required" for="codigoLicenca">Código da licença</label><input id="codigoLicenca" class="form-control" th:field="*{codigoLicenca}" maxlength="40"></div>
+                <div class="mb-3"><label class="form-label required" for="validade">Validade da licença</label><input id="validade" type="date" class="form-control" th:field="*{validade}"></div>
+            </div>
+            <div class="text-secondary small" th:if="${modoEdicao}">Somente mídias disponíveis podem ser editadas. Status e histórico de locações não são alterados por este formulário.</div>
+        </div><div class="card-footer d-flex"><a th:href="@{/midias}" class="btn btn-outline-secondary">Cancelar</a><button type="submit" class="btn btn-primary ms-auto" th:text="${modoEdicao} ? 'Salvar alterações' : 'Cadastrar mídia'">Cadastrar mídia</button></div>
+    </form></div></div>
+</div></main></div>
+<script>
+(function () {
+    const tipo = document.getElementById('tipo');
+    if (!tipo) return;
+    const fisica = document.querySelector('.physical-fields');
+    const digital = document.querySelector('.digital-fields');
+    function atualizar() {
+        const ehFisica = tipo.value === 'FISICA';
+        fisica.classList.toggle('d-none', !ehFisica);
+        digital.classList.toggle('d-none', ehFisica);
+        document.getElementById('codigoBarras').required = ehFisica;
+        document.getElementById('estadoConservacao').required = ehFisica;
+        document.getElementById('codigoLicenca').required = !ehFisica;
+        document.getElementById('validade').required = !ehFisica;
+    }
+    tipo.addEventListener('change', atualizar);
+    atualizar();
+})();
+</script>
+</body></html>

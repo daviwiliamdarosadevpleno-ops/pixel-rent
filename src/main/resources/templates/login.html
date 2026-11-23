@@ -3,42 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Pixel Rent</title>
+    <meta name="theme-color" content="#206bc4">
+    <title>Entrar - Pixel Rent</title>
+    <link rel="stylesheet" th:href="@{/vendor/tabler/tabler.min.css}">
+    <style>
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 12% 12%, rgba(32, 107, 196, .12), transparent 32rem),
+                linear-gradient(135deg, #f4f7fb 0%, #eef2f7 100%);
+        }
+        .login-shell {
+            width: 100%;
+            max-width: 440px;
+        }
+        .brand-mark {
+            display: inline-flex;
+            width: 3rem;
+            height: 3rem;
+            align-items: center;
+            justify-content: center;
+            border-radius: .85rem;
+            background: #206bc4;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -.04em;
+            box-shadow: 0 8px 20px rgba(32, 107, 196, .22);
+        }
+        .login-card {
+            border: 1px solid rgba(98, 105, 118, .12);
+            box-shadow: 0 18px 48px rgba(30, 41, 59, .08);
+        }
+        .login-footer { color: #667382; }
+    </style>
 </head>
-<body>
-
-    <header>
-        <h1>Pixel Rent</h1>
-        <p>Acesse sua conta</p>
-    </header>
-
-    <main>
-        <h2>Entrar</h2>
-
-        <p th:if="${param.error}">
-            Login ou senha inválidos.
-        </p>
-
-        <p th:if="${param.logout}">
-            Você saiu do sistema.
-        </p>
-
-        <form th:action="@{/login}" method="post">
-            <div>
-                <label for="username">Login:</label>
-                <input type="text" id="username" name="username"
-                       autocomplete="username" required>
+<body class="d-flex flex-column">
+    <div class="page page-center flex-fill">
+        <div class="container container-tight py-5">
+            <div class="text-center mb-4">
+                <div class="brand-mark mx-auto mb-3" aria-label="Pixel Rent">PR</div>
+                <h1 class="h2 mb-1">Pixel Rent</h1>
+                <p class="text-secondary mb-0">Sistema de gerenciamento de locação de jogos</p>
             </div>
 
-            <div>
-                <label for="password">Senha:</label>
-                <input type="password" id="password" name="password"
-                       autocomplete="current-password" required>
+            <div class="card card-md login-card">
+                <div class="card-body p-4 p-md-5">
+                    <div class="mb-4">
+                        <h2 class="h3 mb-1">Acesse sua conta</h2>
+                        <p class="text-secondary mb-0">Informe seu login e sua senha para continuar.</p>
+                    </div>
+
+                    <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                        Login ou senha inválidos. Confira seus dados e tente novamente.
+                    </div>
+
+                    <div th:if="${param.logout}" class="alert alert-success" role="status">
+                        Você saiu do sistema com segurança.
+                    </div>
+
+                    <form th:action="@{/login}" method="post" autocomplete="on">
+                        <div class="mb-3">
+                            <label class="form-label" for="username">Login</label>
+                            <input class="form-control form-control-lg"
+                                   type="text"
+                                   id="username"
+                                   name="username"
+                                   placeholder="Digite seu login"
+                                   autocomplete="username"
+                                   autocapitalize="none"
+                                   spellcheck="false"
+                                   required
+                                   autofocus>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label" for="password">Senha</label>
+                            <input class="form-control form-control-lg"
+                                   type="password"
+                                   id="password"
+                                   name="password"
+                                   placeholder="Digite sua senha"
+                                   autocomplete="current-password"
+                                   required>
+                        </div>
+
+                        <button class="btn btn-primary btn-lg w-100" type="submit">
+                            Entrar no Pixel Rent
+                        </button>
+                    </form>
+                </div>
             </div>
 
-            <button type="submit">Entrar</button>
-        </form>
-    </main>
-
+            <div class="text-center text-secondary small mt-4">
+                <div class="login-footer">Pixel Rent · Acesso ao sistema</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

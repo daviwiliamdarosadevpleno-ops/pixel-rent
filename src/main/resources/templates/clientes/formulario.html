@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastro de cliente')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Cadastro de cliente', ~{::main})}">
+
+<main class="page-body">
+    <div class="container-xl">
+        <div class="page-header d-print-none mb-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="page-pretitle">Cadastros / Clientes</div>
+                    <h2 class="page-title" th:text="${modoEdicao} ? 'Editar cliente' : 'Novo cliente'">Novo cliente</h2>
+                    <div class="text-secondary mt-1">Preencha os dados cadastrais do cliente.</div>
+                </div>
+                <div class="col-auto ms-auto"><a th:href="@{/clientes}" class="btn btn-outline-secondary">Voltar à listagem</a></div>
+            </div>
+        </div>
+
+        <div class="row row-cards">
+            <div class="col-12 col-lg-8 col-xl-7">
+                <form th:action="@{${urlAcao}}" th:object="${clienteForm}" method="post" class="card">
+                    <div class="card-header"><h3 class="card-title">Dados cadastrais</h3></div>
+                    <div class="card-body">
+                        <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+
+                        <div class="mb-3">
+                            <label for="nome" class="form-label required">Nome completo</label>
+                            <input type="text" class="form-control" id="nome" th:field="*{nome}"
+                                   maxlength="100" placeholder="Digite o nome completo" autocomplete="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cpf" class="form-label required">CPF</label>
+                            <input type="text" class="form-control" id="cpf" th:field="*{cpf}"
+                                   maxlength="14" inputmode="numeric" placeholder="000.000.000-00" required>
+                            <small class="form-hint">Informe os 11 dígitos do CPF.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label">Telefone</label>
+                            <input type="tel" class="form-control" id="telefone" th:field="*{telefone}"
+                                   maxlength="20" placeholder="(00) 00000-0000" autocomplete="tel">
+                        </div>
+                        <div class="mb-0">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}"
+                                   maxlength="100" placeholder="exemplo@email.com" autocomplete="email">
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                        <span class="text-secondary small">* Campos obrigatórios</span>
+                        <div class="ms-auto btn-list">
+                            <a th:href="@{/clientes}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary"
+                                    th:text="${modoEdicao} ? 'Salvar alterações' : 'Cadastrar cliente'">Cadastrar cliente</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+</body>
+</html>

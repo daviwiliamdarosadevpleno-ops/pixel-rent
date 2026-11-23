@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Auditoria')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Auditoria', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Controle administrativo</div><h2 class="page-title">Auditoria de locações</h2><div class="text-secondary mt-1">Histórico de inserções, atualizações e exclusões registradas na tabela de locações.</div></div></div></div>
+    <div class="alert alert-info" role="alert">Esta tela consulta os registros gravados pela trigger de auditoria de <code>locacao</code>. Ela não representa um histórico de todas as ações ou de cada item individualmente. Registros anteriores à identificação do funcionário podem aparecer sem nome associado.</div>
+    <div class="card mb-3"><div class="card-header"><h3 class="card-title">Filtrar registros</h3></div><div class="card-body"><form th:action="@{/auditoria}" method="get" class="row g-3 align-items-end">
+        <div class="col-12 col-md-4"><label for="idLocacao" class="form-label">Número da locação</label><input type="number" min="1" id="idLocacao" name="idLocacao" class="form-control" th:value="${idLocacao}" placeholder="Ex.: 25"></div>
+        <div class="col-12 col-md-4"><label for="operacao" class="form-label">Operação</label><select id="operacao" name="operacao" class="form-select"><option value="">Todas</option><option value="INSERT" th:selected="${operacao == 'INSERT'}">Inserção</option><option value="UPDATE" th:selected="${operacao == 'UPDATE'}">Atualização</option><option value="DELETE" th:selected="${operacao == 'DELETE'}">Exclusão</option></select></div>
+        <div class="col-12 col-md-4 d-flex gap-2"><button type="submit" class="btn btn-primary">Filtrar</button><a th:href="@{/auditoria}" class="btn btn-outline-secondary">Limpar</a></div>
+    </form></div></div>
+    <div class="card"><div class="card-header"><h3 class="card-title">Eventos registrados</h3><div class="card-actions text-secondary" th:text="${#lists.size(registros)} + ' registro(s) (limite de 250)'"></div></div>
+        <div class="table-responsive"><table class="table table-vcenter card-table"><thead><tr><th>Data e hora</th><th>Operação</th><th>Locação</th><th>Funcionário</th><th>Usuário do banco</th><th>Dados</th></tr></thead><tbody>
+            <tr th:each="registro : ${registros}">
+                <td class="text-nowrap" th:text="${registro.dataHora() == null ? '-' : #temporals.format(registro.dataHora(), 'dd/MM/yyyy HH:mm:ss')}">22/11/2026 10:00:00</td>
+                <td><span class="badge" th:classappend="${registro.operacao() == 'INSERT'} ? 'bg-success-lt' : (${registro.operacao() == 'DELETE'} ? 'bg-danger-lt' : 'bg-blue-lt')" th:text="${registro.operacao()}">UPDATE</span></td>
+                <td th:text="|#${registro.idLocacao()}|">#1</td>
+                <td><div th:text="${registro.nomeFuncionario() == null ? 'Não identificado' : registro.nomeFuncionario()}"></div><div class="text-secondary small" th:if="${registro.idFuncionarioAcao() != null}" th:text="|ID ${registro.idFuncionarioAcao()}|"></div></td>
+                <td th:text="${registro.usuarioBanco()}">usuario</td>
+                <td><details><summary>Ver dados</summary><div class="mt-2" th:if="${registro.dadosAntigosJson() != null}"><div class="text-secondary small fw-semibold">Dados anteriores</div><pre class="small bg-light p-2 rounded" th:text="${registro.dadosAntigosJson()}"></pre></div><div class="mt-2" th:if="${registro.dadosNovosJson() != null}"><div class="text-secondary small fw-semibold">Dados novos</div><pre class="small bg-light p-2 rounded" th:text="${registro.dadosNovosJson()}"></pre></div></details></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(registros)}"><td colspan="6" class="text-secondary py-4 text-center">Nenhum evento de auditoria encontrado com esses filtros.</td></tr>
+        </tbody></table></div>
+    </div>
+</div></main>
+</div>
+</body>
+</html>

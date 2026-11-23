@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#182433">
+    <title th:text="${titulo} + ' | Pixel Rent'">Pixel Rent</title>
+    <link rel="stylesheet" th:href="@{/vendor/tabler/tabler.min.css}">
+    <link rel="stylesheet" th:href="@{/css/pixelrent.css}">
+</head>
+<body>
+<div th:fragment="shell(titulo, conteudo)" class="page">
+    <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Abrir menu"><span class="navbar-toggler-icon"></span></button>
+            <h1 class="navbar-brand navbar-brand-autodark"><a th:href="@{/}" class="text-decoration-none text-reset"><span class="pixelrent-brand-mark">PR</span><span class="ms-2">Pixel Rent</span></a></h1>
+            <div class="collapse navbar-collapse" id="sidebar-menu"><ul class="navbar-nav pt-lg-3">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}"><span class="nav-link-title">Painel principal</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('CLIENTES')}"><a class="nav-link" th:href="@{/clientes}"><span class="nav-link-title">Clientes</span></a></li>
+                <li class="nav-item mt-3"><span class="nav-link disabled text-uppercase small fw-bold">Catálogo</span></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('GENEROS')}"><a class="nav-link" th:href="@{/generos}"><span class="nav-link-title">Gêneros</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('PLATAFORMAS')}"><a class="nav-link" th:href="@{/plataformas}"><span class="nav-link-title">Plataformas</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('JOGOS')}"><a class="nav-link" th:href="@{/jogos}"><span class="nav-link-title">Jogos</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('MIDIAS')}"><a class="nav-link" th:href="@{/midias}"><span class="nav-link-title">Mídias</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('FUNCIONARIOS')}"><a class="nav-link" th:href="@{/funcionarios}"><span class="nav-link-title">Funcionários</span></a></li>
+                <li class="nav-item mt-3"><span class="nav-link disabled text-uppercase small fw-bold">Operações</span></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('LOCACOES')}"><a class="nav-link" th:href="@{/locacoes}"><span class="nav-link-title">Locações</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('DEVOLUCOES')}"><a class="nav-link" th:href="@{/devolucoes}"><span class="nav-link-title">Devoluções</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('CONSULTAS')}"><a class="nav-link" th:href="@{/consultas}"><span class="nav-link-title">Consultas</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('MANUTENCAO')}"><a class="nav-link" th:href="@{/manutencao}"><span class="nav-link-title">Manutenção</span></a></li>
+                <li class="nav-item mt-3"><span class="nav-link disabled text-uppercase small fw-bold">Relatórios e controle</span></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('RELATORIO_JOGOS_MAIS_ALUGADOS')}"><a class="nav-link" th:href="@{/relatorios/jogos-mais-alugados}"><span class="nav-link-title">Jogos mais alugados</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('RELATORIO_FATURAMENTO_MENSAL')}"><a class="nav-link" th:href="@{/relatorios/faturamento-mensal}"><span class="nav-link-title">Faturamento mensal</span></a></li>
+                <li class="nav-item" th:if="${permissoes != null and permissoes.contains('AUDITORIA')}"><a class="nav-link" th:href="@{/auditoria}"><span class="nav-link-title">Auditoria</span></a></li>
+            </ul></div>
+        </div>
+    </aside>
+    <div class="page-wrapper">
+        <header class="navbar navbar-expand-md d-print-none"><div class="container-xl"><div class="navbar-nav flex-row order-md-last"><form th:action="@{/logout}" method="post" class="m-0"><button type="submit" class="btn btn-outline-danger btn-sm">Sair do sistema</button></form></div><div class="navbar-nav"><span class="navbar-text text-secondary" th:text="${titulo}">Painel principal</span></div></div></header>
+        <div th:replace="${conteudo}"><main class="page-body"><div class="container-xl"></div></main></div>
+        <footer class="footer footer-transparent d-print-none"><div class="container-xl"><div class="text-center text-secondary small">Pixel Rent · Sistema de gerenciamento de locação de jogos</div></div></footer>
+    </div>
+    <script th:src="@{/vendor/tabler/tabler.min.js}"></script>
+</div>
+</body>
+</html>

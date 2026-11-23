@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nova locação')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Nova locação', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Operações / Locações</div><h2 class="page-title">Nova locação</h2><div class="text-secondary mt-1">Selecione um cliente, as mídias e o prazo em dias.</div></div><div class="col-auto"><a th:href="@{/locacoes}" class="btn btn-outline-secondary">Voltar</a></div></div></div>
+    <div class="row row-cards"><div class="col-12 col-xl-8">
+        <form th:action="@{/locacoes}" th:object="${form}" method="post" class="card">
+            <div class="card-header"><h3 class="card-title">Dados da locação</h3></div>
+            <div class="card-body"><div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+                <div class="mb-3"><label for="idCliente" class="form-label required">Cliente</label><select class="form-select" id="idCliente" th:field="*{idCliente}" required><option value="">Selecione um cliente ativo</option><option th:each="cliente : ${clientes}" th:value="${cliente.idCliente()}" th:text="|${cliente.nome()} (ID ${cliente.idCliente()})|"></option></select><small class="form-hint">Clientes inativos não são disponibilizados para locação.</small></div>
+                <div class="mb-3"><label for="idsMidias" class="form-label required">Mídias disponíveis</label><select class="form-select" id="idsMidias" th:field="*{idsMidias}" multiple size="9" required><option th:each="midia : ${midiasDisponiveis}" th:value="${midia.idMidia()}" th:text="|#${midia.idMidia()} · ${midia.tituloJogo()} — ${midia.plataforma()} (${midia.tipo()}) — ${#numbers.formatCurrency(midia.valorDiaria())}/dia|"></option></select><small class="form-hint">Use Ctrl (Windows) para selecionar várias mídias. Somente mídias disponíveis e licenças válidas aparecem.</small></div>
+                <div class="mb-3"><label for="dias" class="form-label required">Prazo em dias</label><input class="form-control" id="dias" type="number" min="1" th:field="*{dias}" required><small class="form-hint">A data de devolução e o valor total são calculados pela procedure do banco.</small></div>
+            </div>
+            <div class="card-footer d-flex align-items-center"><span class="text-secondary small">A gravação é feita em uma única chamada à procedure do PostgreSQL.</span><div class="ms-auto btn-list"><a th:href="@{/locacoes}" class="btn btn-outline-secondary">Cancelar</a><button type="submit" class="btn btn-primary" th:disabled="${#lists.isEmpty(midiasDisponiveis) or #lists.isEmpty(clientes)}">Registrar locação</button></div></div>
+        </form>
+    </div></div>
+</div></main></div>
+</body></html>

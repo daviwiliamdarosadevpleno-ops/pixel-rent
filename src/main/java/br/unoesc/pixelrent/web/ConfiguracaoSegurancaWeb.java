@@ -1,5 +1,6 @@
-
 package br.unoesc.pixelrent.web;
+
+import jakarta.servlet.DispatcherType;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,52 +24,51 @@ public class ConfiguracaoSegurancaWeb {
         http
             .authenticationProvider(autenticacaoWebProvider)
             .authorizeHttpRequests(autorizacao -> autorizacao
+                // Encaminhamentos internos do servidor.
+                .dispatcherTypeMatchers(
+                        DispatcherType.ERROR,
+                        DispatcherType.FORWARD
+                ).permitAll()
 
-                .requestMatchers("/", "/login").permitAll()
+                // Páginas públicas e arquivos estáticos, incluindo o Tabler local.
+                .requestMatchers(
+                        "/", "/login", "/error",
+                        "/css/**", "/js/**", "/images/**",
+                        "/vendor/**", "/webjars/**", "/favicon.ico"
+                ).permitAll()
 
-                // Cadastros
+                // Cadastros.
                 .requestMatchers("/clientes/**")
                     .hasAuthority("PERM_CLIENTES")
-
                 .requestMatchers("/jogos/**")
                     .hasAuthority("PERM_JOGOS")
-
                 .requestMatchers("/funcionarios/**")
                     .hasAuthority("PERM_FUNCIONARIOS")
-
                 .requestMatchers("/generos/**")
                     .hasAuthority("PERM_GENEROS")
-
                 .requestMatchers("/plataformas/**")
                     .hasAuthority("PERM_PLATAFORMAS")
-
                 .requestMatchers("/midias/**")
                     .hasAuthority("PERM_MIDIAS")
 
-                // Operações
+                // Operações.
                 .requestMatchers("/locacoes/**")
                     .hasAuthority("PERM_LOCACOES")
-
                 .requestMatchers("/devolucoes/**")
                     .hasAuthority("PERM_DEVOLUCOES")
-
                 .requestMatchers("/consultas/**")
                     .hasAuthority("PERM_CONSULTAS")
-
                 .requestMatchers("/manutencao/**")
                     .hasAuthority("PERM_MANUTENCAO")
 
-                // Relatórios
+                // Relatórios.
                 .requestMatchers("/relatorios/jogos-mais-alugados/**")
                     .hasAuthority("PERM_RELATORIO_JOGOS_MAIS_ALUGADOS")
-
                 .requestMatchers("/relatorios/faturamento-mensal/**")
                     .hasAuthority("PERM_RELATORIO_FATURAMENTO_MENSAL")
-
                 .requestMatchers("/auditoria/**")
                     .hasAuthority("PERM_AUDITORIA")
 
-                // Qualquer outra rota exige autenticação
                 .anyRequest().authenticated()
             )
             .formLogin(formulario -> formulario

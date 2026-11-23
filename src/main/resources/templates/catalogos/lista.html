@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${tituloModulo})}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell(${tituloModulo}, ~{::main})}">
+<main class="page-body">
+    <div class="container-xl">
+        <div class="page-header d-print-none mb-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="page-pretitle">Cadastros</div>
+                    <h2 class="page-title" th:text="${tituloModulo}">Cadastros</h2>
+                    <div class="text-secondary mt-1" th:text="${descricaoModulo}">Gerencie os registros.</div>
+                </div>
+                <div class="col-auto ms-auto d-print-none">
+                    <a th:href="@{|${urlBase}/novo|}" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg>
+                        <span th:text="|Novo ${nomeSingular}|">Novo cadastro</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${sucesso}" class="alert alert-success alert-dismissible" role="alert">
+            <div th:text="${sucesso}">Operação realizada.</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+        </div>
+        <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+
+        <div class="card mb-3">
+            <div class="card-header"><h3 class="card-title">Pesquisar</h3></div>
+            <div class="card-body">
+                <form th:action="@{${urlBase}}" method="get" class="row g-3 align-items-end">
+                    <div class="col-12 col-lg-7">
+                        <label for="pesquisa" class="form-label">Nome</label>
+                        <input type="search" class="form-control" id="pesquisa" name="pesquisa"
+                               placeholder="Digite o nome" th:value="${pesquisa}">
+                    </div>
+                    <div class="col-12 col-lg-5 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        <a th:href="@{${urlBase}}" class="btn btn-outline-secondary">Limpar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title" th:text="|${tituloModulo} cadastrados|">Registros cadastrados</h3>
+                <div class="card-actions text-secondary" th:text="${#lists.size(itens)} + ' registro(s)'"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table table-hover">
+                    <thead><tr><th>ID</th><th>Nome</th><th class="w-1">Ações</th></tr></thead>
+                    <tbody>
+                    <tr th:each="item : ${itens}">
+                        <td class="text-secondary" th:text="${item.id()}">1</td>
+                        <td class="fw-semibold" th:text="${item.nome()}">Nome</td>
+                        <td>
+                            <div class="btn-list flex-nowrap">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   th:href="@{|${urlBase}/${item.id()}/editar|}">Editar</a>
+                                <form th:action="@{|${urlBase}/${item.id()}/excluir|}" method="post" class="m-0"
+                                      onsubmit="return confirm('Confirma a exclusão deste registro?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(itens)}">
+                        <td colspan="3">
+                            <div class="empty py-4">
+                                <p class="empty-title">Nenhum registro encontrado</p>
+                                <p class="empty-subtitle text-secondary">Altere a pesquisa ou cadastre um novo registro.</p>
+                                <div class="empty-action"><a th:href="@{|${urlBase}/novo|}" class="btn btn-primary">Cadastrar</a></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+</body>
+</html>

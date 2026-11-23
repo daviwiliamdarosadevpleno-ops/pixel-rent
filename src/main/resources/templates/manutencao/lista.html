@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Manutenção')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Manutenção', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Controle de mídias</div><h2 class="page-title">Manutenção</h2><div class="text-secondary mt-1">Consulte mídias encaminhadas para manutenção e libere as que estiverem reparadas.</div></div></div></div>
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div><div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+    <div class="card"><div class="card-header"><h3 class="card-title">Mídias em manutenção</h3><div class="card-actions text-secondary" th:text="${#lists.size(midias)} + ' registro(s)'"></div></div>
+        <div class="table-responsive"><table class="table table-vcenter card-table table-hover"><thead><tr><th>ID</th><th>Jogo</th><th>Plataforma</th><th>Tipo</th><th>Identificador</th><th>Validade digital</th><th>Ação</th></tr></thead><tbody>
+            <tr th:each="midia : ${midias}"><td th:text="${midia.idMidia()}">1</td><td class="fw-semibold" th:text="${midia.tituloJogo()}">Jogo</td><td th:text="${midia.plataforma()}">Plataforma</td><td th:text="${midia.tipo()}">FISICA</td><td th:text="${midia.identificador()}">Código</td><td th:text="${midia.validadeLicenca() == null ? '—' : #temporals.format(midia.validadeLicenca(), 'dd/MM/yyyy')}">—</td><td><form th:action="@{|/manutencao/${midia.idMidia()}/liberar|}" method="post" onsubmit="return confirm('Confirmar que o reparo foi concluído e liberar esta mídia?');"><button type="submit" class="btn btn-sm btn-primary">Liberar mídia</button></form></td></tr>
+            <tr th:if="${#lists.isEmpty(midias)}"><td colspan="7"><div class="empty py-4"><p class="empty-title">Nenhuma mídia em manutenção</p><p class="empty-subtitle text-secondary">Mídias devolvidas com defeito aparecerão aqui.</p></div></td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="mt-3 text-secondary small">Licenças digitais vencidas não são liberadas para o catálogo. A validade precisa estar atualizada antes da liberação.</div>
+</div></main></div>
+</body></html>

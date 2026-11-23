@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Clientes')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Clientes', ~{::main})}">
+
+<main class="page-body">
+    <div class="container-xl">
+        <div class="page-header d-print-none mb-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="page-pretitle">Cadastros</div>
+                    <h2 class="page-title">Clientes</h2>
+                    <div class="text-secondary mt-1">Gerencie os clientes cadastrados no Pixel Rent.</div>
+                </div>
+                <div class="col-auto ms-auto d-print-none">
+                    <a th:href="@{/clientes/novo}" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg>
+                        Novo cliente
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${sucesso}" class="alert alert-success alert-dismissible" role="alert">
+            <div class="d-flex"><div><svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg></div><div th:text="${sucesso}">Operação realizada.</div></div>
+            <a class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></a>
+        </div>
+        <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+
+        <div class="card mb-3">
+            <div class="card-header"><h3 class="card-title">Pesquisar clientes</h3></div>
+            <div class="card-body">
+                <form th:action="@{/clientes}" method="get" class="row g-3 align-items-end">
+                    <div class="col-12 col-lg-6">
+                        <label for="pesquisa" class="form-label">Nome ou CPF</label>
+                        <input type="search" class="form-control" id="pesquisa" name="pesquisa"
+                               placeholder="Digite o nome ou CPF" th:value="${pesquisa}">
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <label class="form-check mt-lg-4">
+                            <input class="form-check-input" type="checkbox" id="incluirInativos"
+                                   name="incluirInativos" value="true" th:checked="${incluirInativos}">
+                            <span class="form-check-label">Mostrar clientes inativos</span>
+                        </label>
+                    </div>
+                    <div class="col-12 col-lg-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        <a th:href="@{/clientes}" class="btn btn-outline-secondary">Limpar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Clientes cadastrados</h3>
+                <div class="card-actions text-secondary" th:text="${#lists.size(clientes)} + ' registro(s)'"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th><th>Nome</th><th>CPF</th><th>Telefone</th>
+                        <th>E-mail</th><th>Cadastro</th><th>Situação</th><th class="w-1">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cliente : ${clientes}">
+                        <td class="text-secondary" th:text="${cliente.idCliente()}"></td>
+                        <td class="fw-semibold" th:text="${cliente.nome()}"></td>
+                        <td th:text="${cliente.cpf()}"></td>
+                        <td th:text="${cliente.telefone()} ?: '-'"></td>
+                        <td th:text="${cliente.email()} ?: '-'"></td>
+                        <td th:text="${cliente.dataCadastro()}"></td>
+                        <td>
+                            <span th:if="${cliente.ativo()}" class="badge bg-success">Ativo</span>
+                            <span th:unless="${cliente.ativo()}" class="badge bg-secondary">Inativo</span>
+                        </td>
+                        <td>
+                            <div class="btn-list flex-nowrap">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   th:href="@{/clientes/{id}/editar(id=${cliente.idCliente()})}">Editar</a>
+                                <form th:action="@{/clientes/{id}/situacao(id=${cliente.idCliente()})}"
+                                      method="post" class="m-0"
+                                      onsubmit="return confirm('Confirma a alteração da situação deste cliente?');">
+                                    <input type="hidden" name="ativo" th:value="${!cliente.ativo()}">
+                                    <button type="submit" class="btn btn-sm"
+                                            th:classappend="${cliente.ativo()} ? 'btn-outline-danger' : 'btn-outline-success'"
+                                            th:text="${cliente.ativo()} ? 'Desativar' : 'Ativar'">Alterar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(clientes)}">
+                        <td colspan="8">
+                            <div class="empty py-4">
+                                <p class="empty-title">Nenhum cliente encontrado</p>
+                                <p class="empty-subtitle text-secondary">Altere os filtros ou cadastre um novo cliente.</p>
+                                <div class="empty-action"><a th:href="@{/clientes/novo}" class="btn btn-primary">Cadastrar cliente</a></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+</body>
+</html>

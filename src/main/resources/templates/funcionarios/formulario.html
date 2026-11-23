@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastro de funcionário')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Cadastro de funcionário', ~{::main})}">
+<main class="page-body"><div class="container-xl">
+    <div class="page-header d-print-none mb-3"><div class="row align-items-center"><div class="col"><div class="page-pretitle">Administração / Funcionários</div><h2 class="page-title" th:text="${modoEdicao} ? 'Editar funcionário' : 'Novo funcionário'">Novo funcionário</h2><div class="text-secondary mt-1">Dados de acesso e identificação da conta.</div></div><div class="col-auto ms-auto"><a th:href="@{/funcionarios}" class="btn btn-outline-secondary">Voltar à listagem</a></div></div></div>
+    <div class="row row-cards"><div class="col-12 col-xl-8">
+        <form th:action="@{${urlAcao}}" th:object="${funcionarioForm}" method="post" class="card">
+            <div class="card-header"><h3 class="card-title">Dados do funcionário</h3></div>
+            <div class="card-body">
+                <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+                <div class="mb-3"><label for="nome" class="form-label required">Nome completo</label><input id="nome" th:field="*{nome}" class="form-control" maxlength="100" autocomplete="name" required></div>
+                <div class="row"><div class="col-md-6 mb-3"><label for="cpf" class="form-label required">CPF</label><input id="cpf" th:field="*{cpf}" class="form-control" maxlength="14" inputmode="numeric" placeholder="000.000.000-00" required></div><div class="col-md-6 mb-3"><label for="telefone" class="form-label">Telefone</label><input id="telefone" th:field="*{telefone}" class="form-control" maxlength="20" autocomplete="tel"></div></div>
+                <div class="mb-3"><label for="email" class="form-label">E-mail</label><input type="email" id="email" th:field="*{email}" class="form-control" maxlength="100" autocomplete="email"></div>
+                <hr><div class="mb-3"><label for="login" class="form-label required">Login</label><input id="login" th:field="*{login}" class="form-control" maxlength="50" autocomplete="username" required><small class="form-hint">De 3 a 50 caracteres: letras sem acento, números, ponto, hífen ou sublinhado.</small></div>
+                <div class="row"><div class="col-md-6 mb-3"><label for="perfil" class="form-label required">Perfil de acesso</label><select id="perfil" th:field="*{perfil}" class="form-select" required><option th:each="perfilOpcao : ${perfis}" th:value="${perfilOpcao}" th:text="${perfilOpcao.descricao()}">Funcionário</option></select></div></div>
+                <hr><p class="fw-semibold mb-2">Senha de acesso</p><p class="text-secondary small" th:if="${modoEdicao}">Deixe os campos de senha em branco para manter a senha atual.</p>
+                <div class="row"><div class="col-md-6 mb-3"><label for="senha" class="form-label" th:classappend="${!modoEdicao} ? 'required'">Senha <span th:if="${modoEdicao}" class="text-secondary">(opcional)</span></label><input type="password" id="senha" th:field="*{senha}" class="form-control" autocomplete="new-password" th:required="${!modoEdicao}" minlength="8" maxlength="72"></div><div class="col-md-6 mb-3"><label for="confirmarSenha" class="form-label">Confirmar senha <span th:if="${!modoEdicao}" class="text-danger">*</span></label><input type="password" id="confirmarSenha" th:field="*{confirmarSenha}" class="form-control" autocomplete="new-password" th:required="${!modoEdicao}" minlength="8" maxlength="72"></div></div>
+                <small class="form-hint">A senha é armazenada no banco como hash BCrypt; o sistema nunca exibe a senha cadastrada.</small>
+            </div>
+            <div class="card-footer d-flex align-items-center"><span class="text-secondary small">* Campos obrigatórios</span><div class="ms-auto btn-list"><a th:href="@{/funcionarios}" class="btn btn-outline-secondary">Cancelar</a><button type="submit" class="btn btn-primary" th:text="${modoEdicao} ? 'Salvar alterações' : 'Cadastrar funcionário'">Salvar</button></div></div>
+        </form>
+    </div></div>
+</div></main>
+</div>
+</body>
+</html>

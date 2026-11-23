@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dados inválidos')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: shell('Dados inválidos', ~{::main})}">
+<main class="page-body"><div class="container-xl"><div class="empty">
+    <div class="empty-header">400</div><p class="empty-title">Dados inválidos</p>
+    <p class="empty-subtitle text-secondary" th:text="${mensagem} ?: 'Não foi possível processar os dados informados.'">Não foi possível processar os dados informados.</p>
+    <div class="empty-action"><a th:href="@{/}" class="btn btn-primary">Voltar ao painel</a></div>
+</div></div></main>
+</div>
+</body>
+</html>
